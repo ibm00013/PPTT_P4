@@ -30,7 +30,7 @@ import java.util.logging.Logger;
 public class MainServer {
     
     static ServerSocket server=null;
-    static final short TCP_PORT = 80;
+    static final short TCP_PORT = 80; //Puerto TCP escucha
     /**
      * @param args the command line arguments
      */
