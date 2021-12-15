@@ -23,8 +23,8 @@ import java.util.logging.Logger;
  * Autor: Juan Carlos Cuevas Martínez
  *
  ******************************************************
- * Alumno 1:
- * Alumno 2:
+ * Alumno 1: Ignacio Beltrán Mata
+ * Alumno 2: Rafael Estévez Torronteras
  *
  ******************************************************/
 public class MainServer {
