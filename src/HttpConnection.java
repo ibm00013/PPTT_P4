@@ -17,7 +17,8 @@ import java.util.logging.Logger;
  * Carlos Cuevas Martínez
  *
  ******************************************************
- * Alumno 1: Alumno 2:
+ * Alumno 1:Rafael Estévez Torronteras
+ * Alumno 2:Ignacio Beltrán Mata
  *
  ******************************************************/
 public class HttpConnection implements Runnable {
