@@ -7,6 +7,10 @@ import java.net.HttpURLConnection;
 import java.net.Socket;//Implementamos la clase java.net que utiliza Java para las comunicaciones de red.
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.http.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,39 +30,50 @@ import java.util.logging.Logger;
  ******************************************************/
 public class HttpConnection implements Runnable {
 
-	Socket socket = null;
+	Socket socket = null;//Atributo de la clase HttpConnection
 
-	public HttpConnection(Socket s) {
+	public HttpConnection(Socket s) {//Constructor de la clase HttpConnection
 		socket = s;
 	}
 
 	@Override
 	public void run() {
-		DataOutputStream dos = null;
+		DataOutputStream output = null;
 		try {
 			System.out.println("Starting new HTTP connection with " + socket.getInetAddress().toString());
-			dos = new DataOutputStream(socket.getOutputStream());
-			dos.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
-			dos.flush();
-			BufferedReader bis = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			output = new DataOutputStream(socket.getOutputStream());
+			output.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
+			output.flush();
+			BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			
-			URL urlObj = new URL("https://google.com");
+			URL urlObj = new URL("https://google.es");
 			HttpURLConnection httpCon = (HttpURLConnection) urlObj.openConnection();
 			
+			File index = new File("C:\\Users\\ignab\\git\\PPTT_P4\\p4\\index.html");//Creamos una instancia de nuestro fichero index.html
+			//FileOutputStream foutput = new FileOutputStream(index);
+			FileInputStream finput = new FileInputStream(index);
+			byte[] datosfichero = new byte[1024];
+			
+			while(finput.available() > 0) {//Leemos el contenido y lo almacenamos en un array llamado datosfichero
+				finput.read(datosfichero);
+				output.write(datosfichero);//Enviamos al cliente el contenido del fichero
+				output.flush();
+			}
+			//String text = "<html><head></head><body><h1>HOLA</h1></body></html>";
+			//foutput.write(text.getBytes());
 		
 			System.out.println("El método es : "+httpCon.getRequestMethod()+ ", la ruta es: "+httpCon.getURL()+ " y la versión del protocolo y código de respuesta es: "+httpCon.getHeaderField(0));
 			
 			if (httpCon.getResponseCode() != HttpURLConnection.HTTP_OK) {// HTTP_OK es 200
-			System.out.println("El servidor devolvió el código de respuesta" + httpCon.getResponseCode()
-			+ ". Descarga fallida.");
+			System.out.println("El servidor devolvió el código de respuesta" + httpCon.getResponseCode());
 			System.exit(0);
 			}
 			else {
-				String line = bis.readLine();
-				while (!(line=bis.readLine()).equals("") && line!=null) {
+				String line = input.readLine();
+				while (!(line=input.readLine()).equals("") && line!=null) {
 					System.out.println("Leído["+line.length()+"]: "+line);
-					dos.write(("ECO " + line + "\r\n").getBytes());
-					dos.flush();
+					output.write(("ECO " + line + "\r\n").getBytes());
+					output.flush();
 			}
 			
 			
@@ -67,7 +82,7 @@ public class HttpConnection implements Runnable {
 			Logger.getLogger(HttpConnection.class.getName()).log(Level.SEVERE, null, ex);
 		} finally {
 			try {
-				dos.close();
+				output.close();
 				socket.close();
 			} catch (IOException ex) {
 				Logger.getLogger(HttpConnection.class.getName()).log(Level.SEVERE, null, ex);
