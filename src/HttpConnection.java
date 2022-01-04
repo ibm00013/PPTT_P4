@@ -6,11 +6,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.Socket;//Implementamos la clase java.net que utiliza Java para las comunicaciones de red.
 import java.net.URL;
-import java.net.URLConnection;
-import java.net.http.*;
+//import java.net.URLConnection;
+//import java.net.http.*;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
+//import java.io.FileOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -75,6 +75,7 @@ public class HttpConnection implements Runnable {
 					output.write(("ECO " + line + "\r\n").getBytes());
 					output.flush();
 			}
+				finput.close();
 			
 			
 			}
