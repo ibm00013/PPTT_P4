@@ -50,11 +50,10 @@ public class HttpConnection implements Runnable {
 			 
 			
 			
-			String line = input.readLine();
-			String request = line;
+			String request = input.readLine();
 			String [] separacion = request.split(" "); 	
 			String ruta = separacion[1];
-			
+			String line = "";
 			
 			
 			if(request.startsWith("GET")) {
@@ -62,7 +61,9 @@ public class HttpConnection implements Runnable {
 				System.out.println(request);
 				
 				
-				if(!ruta.startsWith("/") && separacion[2]!="HTTP/1.1") {//Controlamos que la ruta empiece por / y la versión del protocolo sea HTTP/1.1
+				if(!ruta.startsWith("/") || !separacion[2].equals("HTTP/1.1")) {//Controlamos que la ruta empiece por / y la versión del protocolo sea HTTP/1.1
+					System.out.println(separacion[2]);
+					System.out.println(separacion[2]!="HTTP/1.1");
 					output.write("HTTP/1.1 400 Bad Request\r\n\r\n".getBytes());
 					output.flush();
 					System.out.println("ERROR: Bad Request (400)");
