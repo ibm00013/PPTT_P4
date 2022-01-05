@@ -16,6 +16,8 @@ import java.io.FileReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.imageio.ImageIO;
+
 /**
  * Protocolos de Transporte Grado en Ingeniería Telemática Dpto. Ingeníería de
  * Telecomunicación Univerisdad de Jaén
@@ -74,7 +76,7 @@ public class HttpConnection implements Runnable {
 			        output.write("\r\n".getBytes());
 			            // Envía el HTML
 			  
-			        File index = new File("C:\\Users\\rafae\\git\\PPTT_P4\\p4\\index.html");//Creamos una instancia de nuestro fichero index.html
+			        File index = new File("C:\\Users\\ignab\\git\\PPTT_P4\\p4\\index.html");//Creamos una instancia de nuestro fichero index.html
 					BufferedReader lector = new BufferedReader(new FileReader(index));//Buffer encargado de leer el archivo
 					StringBuilder fichero = new StringBuilder();//Clase encargada de crear un String con el contenido del archivo línea por línea
 					String contenido=null;
@@ -96,8 +98,17 @@ public class HttpConnection implements Runnable {
 			        output.write("\r\n".getBytes());
 			            // Envía el HTML
 			  
-			        File imagen = new File("C:\\Users\\rafae\\git\\PPTT_P4\\p4\\img\\uja.jpeg");//Creamos una instancia de nuestro fichero index.html
-					BufferedReader lector2 = new BufferedReader(new FileReader(imagen));//Buffer encargado de leer el archivo
+			        File imagen = new File("C:\\Users\\ignab\\git\\PPTT_P4\\p4\\img\\uja.jpeg");//Creamos una instancia de nuestro fichero index.html
+			        long tamimg = imagen.length();
+			        byte[] bytesimg = new byte[(int)tamimg];
+			        FileInputStream fis = new FileInputStream(imagen);
+			        fis.read(bytesimg);
+			        fis.close();
+			        
+			        output.write(bytesimg);
+			        output.flush();
+			            /*
+			        BufferedReader lector2 = new BufferedReader(new FileReader(imagen));//Buffer encargado de leer el archivo
 					StringBuilder fichero2 = new StringBuilder();//Clase encargada de crear un String con el contenido del archivo línea por línea
 					String contenido2=null;
 					while((contenido2 = lector2.readLine()) != null) {//Leemos el contenido y lo almacenamos en un array llamado datosfichero
@@ -108,6 +119,7 @@ public class HttpConnection implements Runnable {
 			        
 					output.write(html2.getBytes());//Enviamos el archivo
 					output.flush();
+					*/
 					break;
 				case "/css/css.css":
 					output.write("HTTP/1.1 200 OK\r\n".getBytes());
@@ -118,7 +130,7 @@ public class HttpConnection implements Runnable {
 			        output.write("\r\n".getBytes());
 			            // Envía el HTML
 			  
-			        File style = new File("C:\\Users\\rafae\\git\\PPTT_P4\\p4\\css\\css.css");//Creamos una instancia de nuestro fichero index.html
+			        File style = new File("C:\\Users\\ignab\\git\\PPTT_P4\\p4\\css\\css.css");//Creamos una instancia de nuestro fichero index.html
 					BufferedReader lector3 = new BufferedReader(new FileReader(style));//Buffer encargado de leer el archivo
 					StringBuilder fichero3 = new StringBuilder();//Clase encargada de crear un String con el contenido del archivo línea por línea
 					String contenido3=null;
