@@ -60,15 +60,91 @@ public class HttpConnection implements Runnable {
 					//output.write(("ECO " + line + "\r\n").getBytes());
 					//output.flush();
 				}
+				String [] separacion = request.split(" "); 	
+				String ruta = separacion[1];
+				System.out.println(ruta);
+				switch (ruta) {
+				case "/":
+				case "/index.html":
+					output.write("HTTP/1.1 200 OK\r\n".getBytes());
+			        output.write("Content-Type: text/html; \r\n charset=utf-8;\r\n".getBytes());
+			        output.write("Connection: close; \r\n".getBytes());
+			        output.write("Content-Length: 52098;\r\n".getBytes());
+			            // este linea en blanco marca el final de los headers de la response
+			        output.write("\r\n".getBytes());
+			            // Envía el HTML
+			  
+			        File index = new File("C:\\Users\\rafae\\git\\PPTT_P4\\p4\\index.html");//Creamos una instancia de nuestro fichero index.html
+					BufferedReader lector = new BufferedReader(new FileReader(index));//Buffer encargado de leer el archivo
+					StringBuilder fichero = new StringBuilder();//Clase encargada de crear un String con el contenido del archivo línea por línea
+					String contenido=null;
+					while((contenido = lector.readLine()) != null) {//Leemos el contenido y lo almacenamos en un array llamado datosfichero
+						fichero.append(contenido);
+					}
+					
+					String html = fichero.toString();//Almacenamos todo el contenido del archivo html en una sola cadena de texto
+			        
+					output.write(html.getBytes());//Enviamos el archivo
+					output.flush();
+					break;
+				case "/img/uja.jpeg":
+					output.write("HTTP/1.1 200 OK\r\n".getBytes());
+			        output.write("Content-Type: image/jpeg; \r\n charset=utf-8;\r\n".getBytes());
+			        output.write("Connection: close; \r\n".getBytes());
+			        output.write("Content-Length: 52098;\r\n".getBytes());
+			            // este linea en blanco marca el final de los headers de la response
+			        output.write("\r\n".getBytes());
+			            // Envía el HTML
+			  
+			        File imagen = new File("C:\\Users\\rafae\\git\\PPTT_P4\\p4\\img\\uja.jpeg");//Creamos una instancia de nuestro fichero index.html
+					BufferedReader lector2 = new BufferedReader(new FileReader(imagen));//Buffer encargado de leer el archivo
+					StringBuilder fichero2 = new StringBuilder();//Clase encargada de crear un String con el contenido del archivo línea por línea
+					String contenido2=null;
+					while((contenido2 = lector2.readLine()) != null) {//Leemos el contenido y lo almacenamos en un array llamado datosfichero
+						fichero2.append(contenido2);
+					}
+					
+					String html2 = fichero2.toString();//Almacenamos todo el contenido del archivo html en una sola cadena de texto
+			        
+					output.write(html2.getBytes());//Enviamos el archivo
+					output.flush();
+					break;
+				case "css/css.css":
+					output.write("HTTP/1.1 200 OK\r\n".getBytes());
+			        output.write("Content-Type: text/css; \r\n charset=utf-8;\r\n".getBytes());
+			        output.write("Connection: close; \r\n".getBytes());
+			        output.write("Content-Length: 52098;\r\n".getBytes());
+			            // este linea en blanco marca el final de los headers de la response
+			        output.write("\r\n".getBytes());
+			            // Envía el HTML
+			  
+			        File style = new File("C:\\Users\\rafae\\git\\PPTT_P4\\p4\\css\\css.css");//Creamos una instancia de nuestro fichero index.html
+					BufferedReader lector3 = new BufferedReader(new FileReader(style));//Buffer encargado de leer el archivo
+					StringBuilder fichero3 = new StringBuilder();//Clase encargada de crear un String con el contenido del archivo línea por línea
+					String contenido3=null;
+					while((contenido3 = lector3.readLine()) != null) {//Leemos el contenido y lo almacenamos en un array llamado datosfichero
+						fichero3.append(contenido3);
+					}
+					
+					String html3 = fichero3.toString();//Almacenamos todo el contenido del archivo html en una sola cadena de texto
+			        
+					output.write(html3.getBytes());//Enviamos el archivo
+					output.flush();
+					break;
+				default:
+					output.write("HTTP/1.1 404 Not found\r\n\r\n".getBytes());
+					output.flush();
+					System.out.println("ERROR: Not found (404)");
+				}
 				output.write("HTTP/1.1 200 OK\r\n".getBytes());
-		        output.write("Content-Type: text/html;\r\n charset=utf-8;\r\n".getBytes());
+		        output.write("Content-Type: text/html, image/jpeg, text/css; \r\n charset=utf-8;\r\n".getBytes());
 		        output.write("Connection: close; \r\n".getBytes());
-		        output.write("Server: MINISERVER;\r\n".getBytes());
+		        output.write("Content-Length: 52098;\r\n".getBytes());
 		            // este linea en blanco marca el final de los headers de la response
 		        output.write("\r\n".getBytes());
 		            // Envía el HTML
 		  
-		        File index = new File("C:\\Users\\ignab\\git\\PPTT_P4\\p4\\index.html");//Creamos una instancia de nuestro fichero index.html
+		        File index = new File("C:\\Users\\rafae\\git\\PPTT_P4\\p4\\index.html");//Creamos una instancia de nuestro fichero index.html
 				BufferedReader lector = new BufferedReader(new FileReader(index));//Buffer encargado de leer el archivo
 				StringBuilder fichero = new StringBuilder();//Clase encargada de crear un String con el contenido del archivo línea por línea
 				String contenido=null;
