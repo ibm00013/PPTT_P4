@@ -47,24 +47,37 @@ public class HttpConnection implements Runnable {
 			System.out.println("Starting new HTTP connection with " + socket.getInetAddress().toString());
 			output = new DataOutputStream(socket.getOutputStream());
 			BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			 
 			
-			URL url = new URL("http://"+InetAddress.getLocalHost().getHostAddress());
-			HttpURLConnection urlcon = (HttpURLConnection) url.openConnection();
-			
-			urlcon.setRequestProperty("Connection", "close");
 			
 			String line = input.readLine();
 			String request = line;
-			if(line.startsWith("GET")) {
-				System.out.println(line);
+			String [] separacion = request.split(" "); 	
+			String ruta = separacion[1];
+			
+			
+			
+			if(request.startsWith("GET")) {
+				
+				System.out.println(request);
+				
+				
+				if(!ruta.startsWith("/") && separacion[2]!="HTTP/1.1") {//Controlamos que la ruta empiece por / y la versión del protocolo sea HTTP/1.1
+					output.write("HTTP/1.1 400 Bad Request\r\n\r\n".getBytes());
+					output.flush();
+					System.out.println("ERROR: Bad Request (400)");
+				}else {
+				
+				
 				while (!(line=input.readLine()).equals("") && line!=null) {
 					System.out.println("Leído["+line.length()+"]: "+line);
 					//output.write(("ECO " + line + "\r\n").getBytes());
 					//output.flush();
 				}
-				String [] separacion = request.split(" "); 	
-				String ruta = separacion[1];
+				
+				
 				System.out.println(ruta);
+				
 				switch (ruta) {
 				case "/":
 				case "/index.html":
@@ -107,19 +120,6 @@ public class HttpConnection implements Runnable {
 			        
 			        output.write(bytesimg);
 			        output.flush();
-			            /*
-			        BufferedReader lector2 = new BufferedReader(new FileReader(imagen));//Buffer encargado de leer el archivo
-					StringBuilder fichero2 = new StringBuilder();//Clase encargada de crear un String con el contenido del archivo línea por línea
-					String contenido2=null;
-					while((contenido2 = lector2.readLine()) != null) {//Leemos el contenido y lo almacenamos en un array llamado datosfichero
-						fichero2.append(contenido2);
-					}
-					
-					String html2 = fichero2.toString();//Almacenamos todo el contenido del archivo html en una sola cadena de texto
-			        
-					output.write(html2.getBytes());//Enviamos el archivo
-					output.flush();
-					*/
 					break;
 				case "/css/css.css":
 					output.write("HTTP/1.1 200 OK\r\n".getBytes());
@@ -148,44 +148,13 @@ public class HttpConnection implements Runnable {
 					output.flush();
 					System.out.println("ERROR: Not found (404)");
 				}
-				
+				}
+
 			}else {
 				output.write("HTTP/1.1 405 Method not allowed\r\n\r\n".getBytes());
 				output.flush();
 				System.out.println("ERROR: Método no definido (405)");
 			}
-			
-			//output.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
-			//output.flush();
-			
-			
-			//URL urlObj = new URL("https://google.es");
-			//HttpURLConnection httpCon = (HttpURLConnection) urlObj.openConnection();
-			/*
-			File index = new File("C:\\Users\\ignab\\git\\PPTT_P4\\p4\\index.html");//Creamos una instancia de nuestro fichero index.html
-			//FileOutputStream foutput = new FileOutputStream(index);
-			FileInputStream finput = new FileInputStream(index);
-			byte[] datosfichero = new byte[1024];
-			
-			while(finput.available() > 0) {//Leemos el contenido y lo almacenamos en un array llamado datosfichero
-				finput.read(datosfichero);
-				output.write(datosfichero);//Enviamos al cliente el contenido del fichero
-				output.flush();
-			}
-			//String text = "<html><head></head><body><h1>HOLA</h1></body></html>";
-			//foutput.write(text.getBytes());
-		
-			//System.out.println("El método es : "+httpCon.getRequestMethod()+ ", la ruta es: "+httpCon.getURL()+ " y la versión del protocolo y código de respuesta es: "+httpCon.getHeaderField(0));
-			
-			/*if (httpCon.getResponseCode() != HttpURLConnection.HTTP_OK) {// HTTP_OK es 200
-			System.out.println("El servidor devolvió el código de respuesta" + httpCon.getResponseCode());
-			System.exit(0);
-			}
-			else {*/
-				
-				//finput.close();
-			
-			
 		} catch (IOException ex) {
 			Logger.getLogger(HttpConnection.class.getName()).log(Level.SEVERE, null, ex);
 		} finally {
