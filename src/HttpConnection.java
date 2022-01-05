@@ -11,6 +11,7 @@ import java.net.URL;
 //import java.net.http.*;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 //import java.io.FileOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -66,13 +67,23 @@ public class HttpConnection implements Runnable {
 		            // este linea en blanco marca el final de los headers de la response
 		        output.write("\r\n".getBytes());
 		            // Envía el HTML
-		        output.write("<H1>Bienvenido al Mini Server : 'EL PATRON'</H1>".getBytes());
-		        output.write(("<H2>Request Method->" + request + "</H2>").getBytes());
-		        output.write("<p>Raestoestofufa Raestoestofufa Raestoestofufa Raestoestofufa Raestoestofufa</p>".getBytes());
 		  
+		        File index = new File("C:\\Users\\ignab\\git\\PPTT_P4\\p4\\index.html");//Creamos una instancia de nuestro fichero index.html
+				BufferedReader lector = new BufferedReader(new FileReader(index));//Buffer encargado de leer el archivo
+				StringBuilder fichero = new StringBuilder();//Clase encargada de crear un String con el contenido del archivo línea por línea
+				String contenido=null;
+				while((contenido = lector.readLine()) != null) {//Leemos el contenido y lo almacenamos en un array llamado datosfichero
+					fichero.append(contenido);
+				}
+				
+				String html = fichero.toString();//Almacenamos todo el contenido del archivo html en una sola cadena de texto
+		        
+				output.write(html.getBytes());//Enviamos el archivo
 				output.flush();
 			}else {
-				System.out.println("ERROR 405.");
+				output.write("HTTP/1.1 405 Method not allowed\r\n\r\n".getBytes());
+				output.flush();
+				System.out.println("ERROR: Método no definido (405)");
 			}
 			
 			//output.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
