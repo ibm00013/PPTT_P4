@@ -67,7 +67,7 @@ public class HttpConnection implements Runnable {
 				case "/":
 				case "/index.html":
 					output.write("HTTP/1.1 200 OK\r\n".getBytes());
-			        output.write("Content-Type: text/html; \r\n charset=utf-8;\r\n".getBytes());
+			        output.write("Content-Type: text/html; image/jpeg; text/css; \r\n charset=utf-8;\r\n".getBytes());
 			        output.write("Connection: close; \r\n".getBytes());
 			        output.write("Content-Length: 52098;\r\n".getBytes());
 			            // este linea en blanco marca el final de los headers de la response
@@ -109,7 +109,7 @@ public class HttpConnection implements Runnable {
 					output.write(html2.getBytes());//Enviamos el archivo
 					output.flush();
 					break;
-				case "css/css.css":
+				case "/css/css.css":
 					output.write("HTTP/1.1 200 OK\r\n".getBytes());
 			        output.write("Content-Type: text/css; \r\n charset=utf-8;\r\n".getBytes());
 			        output.write("Connection: close; \r\n".getBytes());
@@ -136,26 +136,7 @@ public class HttpConnection implements Runnable {
 					output.flush();
 					System.out.println("ERROR: Not found (404)");
 				}
-				output.write("HTTP/1.1 200 OK\r\n".getBytes());
-		        output.write("Content-Type: text/html, image/jpeg, text/css; \r\n charset=utf-8;\r\n".getBytes());
-		        output.write("Connection: close; \r\n".getBytes());
-		        output.write("Content-Length: 52098;\r\n".getBytes());
-		            // este linea en blanco marca el final de los headers de la response
-		        output.write("\r\n".getBytes());
-		            // Envía el HTML
-		  
-		        File index = new File("C:\\Users\\rafae\\git\\PPTT_P4\\p4\\index.html");//Creamos una instancia de nuestro fichero index.html
-				BufferedReader lector = new BufferedReader(new FileReader(index));//Buffer encargado de leer el archivo
-				StringBuilder fichero = new StringBuilder();//Clase encargada de crear un String con el contenido del archivo línea por línea
-				String contenido=null;
-				while((contenido = lector.readLine()) != null) {//Leemos el contenido y lo almacenamos en un array llamado datosfichero
-					fichero.append(contenido);
-				}
 				
-				String html = fichero.toString();//Almacenamos todo el contenido del archivo html en una sola cadena de texto
-		        
-				output.write(html.getBytes());//Enviamos el archivo
-				output.flush();
 			}else {
 				output.write("HTTP/1.1 405 Method not allowed\r\n\r\n".getBytes());
 				output.flush();
