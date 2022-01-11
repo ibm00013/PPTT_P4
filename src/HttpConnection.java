@@ -45,32 +45,30 @@ public class HttpConnection implements Runnable {
 		DataOutputStream output = null;
 		try {
 			System.out.println("Starting new HTTP connection with " + socket.getInetAddress().toString());
-			output = new DataOutputStream(socket.getOutputStream());
-			BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			output = new DataOutputStream(socket.getOutputStream()); //Definición salida de los datos
+			BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream())); //Definición de la entrada de los datos
 			 
 			
 			
-			String request = input.readLine();
+			String request = input.readLine(); //Se recoge la primera linea de petición
 			String [] separacion = request.split(" "); 	
-			String ruta = separacion[1];
+			String ruta = separacion[1]; //Se recoge la ruta de la petición
 			String line = "";
 			
 			
-			if(request.startsWith("GET")) {
+			if(request.startsWith("GET")) { //Se comprueba que la petición empieze por GET
 				
 				System.out.println(request);
 				
 				
 				if(!ruta.startsWith("/") || !separacion[2].equals("HTTP/1.1")) {//Controlamos que la ruta empiece por / y la versión del protocolo sea HTTP/1.1
-					System.out.println(separacion[2]);
-					System.out.println(separacion[2]!="HTTP/1.1");
-					output.write("HTTP/1.1 400 Bad Request\r\n\r\n".getBytes());
+					output.write("HTTP/1.1 400 Bad Request\r\n\r\n".getBytes()); //Control de error de aplicación 400 
 					output.flush();
-					System.out.println("ERROR: Bad Request (400)");
+					System.out.println("ERROR: Bad Request (400)"); //Mostramos por pantalla el error
 				}else {
 				
 				
-				while (!(line=input.readLine()).equals("") && line!=null) {
+				while (!(line=input.readLine()).equals("") && line!=null) { //Si no es nulo o está vacio se imprime por pantalla
 					System.out.println("Leído["+line.length()+"]: "+line);
 					//output.write(("ECO " + line + "\r\n").getBytes());
 					//output.flush();
@@ -79,8 +77,8 @@ public class HttpConnection implements Runnable {
 				
 				System.out.println(ruta);
 				
-				switch (ruta) {
-				case "/":
+				switch (ruta) {//Diferentes posibles casos de ruta: Defecto, index.html, uja.jpeg y css.css
+				case "/": //Para la ruta por defecto e index.html se envía el codigo de respuesta 200 OK y las cabeceras correspodientes.
 				case "/index.html":
 					output.write("HTTP/1.1 200 OK\r\n".getBytes());
 			        output.write("Content-Type: text/html; image/jpeg; text/css; \r\n charset=utf-8;\r\n".getBytes());
@@ -90,7 +88,7 @@ public class HttpConnection implements Runnable {
 			        output.write("\r\n".getBytes());
 			            // Envía el HTML
 			  
-			        File index = new File("C:\\Users\\ignab\\git\\PPTT_P4\\p4\\index.html");//Creamos una instancia de nuestro fichero index.html
+			        File index = new File("C:\\Users\\rafae\\git\\PPTT_P4\\p4\\index.html");//Creamos una instancia de nuestro fichero index.html
 					BufferedReader lector = new BufferedReader(new FileReader(index));//Buffer encargado de leer el archivo
 					StringBuilder fichero = new StringBuilder();//Clase encargada de crear un String con el contenido del archivo línea por línea
 					String contenido=null;
@@ -112,7 +110,7 @@ public class HttpConnection implements Runnable {
 			        output.write("\r\n".getBytes());
 			            // Envía el HTML
 			  
-			        File imagen = new File("C:\\Users\\ignab\\git\\PPTT_P4\\p4\\img\\uja.jpeg");//Creamos una instancia de nuestro fichero index.html
+			        File imagen = new File("C:\\Users\\rafae\\git\\PPTT_P4\\p4\\img\\uja.jpeg");//Creamos una instancia de nuestro fichero index.html
 			        long tamimg = imagen.length();
 			        byte[] bytesimg = new byte[(int)tamimg];
 			        FileInputStream fis = new FileInputStream(imagen);
@@ -131,7 +129,7 @@ public class HttpConnection implements Runnable {
 			        output.write("\r\n".getBytes());
 			            // Envía el HTML
 			  
-			        File style = new File("C:\\Users\\ignab\\git\\PPTT_P4\\p4\\css\\css.css");//Creamos una instancia de nuestro fichero index.html
+			        File style = new File("C:\\Users\\rafae\\git\\PPTT_P4\\p4\\css\\css.css");//Creamos una instancia de nuestro fichero index.html
 					BufferedReader lector3 = new BufferedReader(new FileReader(style));//Buffer encargado de leer el archivo
 					StringBuilder fichero3 = new StringBuilder();//Clase encargada de crear un String con el contenido del archivo línea por línea
 					String contenido3=null;
@@ -145,14 +143,14 @@ public class HttpConnection implements Runnable {
 					output.flush();
 					break;
 				default:
-					output.write("HTTP/1.1 404 Not found\r\n\r\n".getBytes());
+					output.write("HTTP/1.1 404 Not found\r\n\r\n".getBytes()); //Se envia por el salida el error 404 Not Found si no se encuentra la ruta.
 					output.flush();
 					System.out.println("ERROR: Not found (404)");
 				}
 				}
 
 			}else {
-				output.write("HTTP/1.1 405 Method not allowed\r\n\r\n".getBytes());
+				output.write("HTTP/1.1 405 Method not allowed\r\n\r\n".getBytes()); //Si el método no es GET (admitido) se envía al cliente el error 405 de Method Not Allowed y se imprime por pantalla
 				output.flush();
 				System.out.println("ERROR: Método no definido (405)");
 			}
@@ -160,8 +158,8 @@ public class HttpConnection implements Runnable {
 			Logger.getLogger(HttpConnection.class.getName()).log(Level.SEVERE, null, ex);
 		} finally {
 			try {
-				output.close();
-				socket.close();
+				output.close();//Se cierra el buffer de salida
+				socket.close();//Cerramos la conexión socket
 			} catch (IOException ex) {
 				Logger.getLogger(HttpConnection.class.getName()).log(Level.SEVERE, null, ex);
 			}
